@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 Internal Server Error</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- <style>
         body { text-align: center; margin: 50px; }
         h1 { color: #dc3535; }
-    </style>
-</head>
-<body>
-    <h1>500 - Internal Server Error</h1>
-    <p>Oops! Something went wrong.</p>
-    <a href="/">Go back to home</a>
-</body>
-</html>
+    </style> -->
+
+    <body>
+        <h1>500 - Internal Server Error</h1>
+        <p>Oops! Something went wrong.</p>
+        <a href="/">Go back to home</a>
+    </body>
+{% endblock %}
+
+
+

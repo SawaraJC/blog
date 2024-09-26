@@ -7,7 +7,7 @@ app = Flask(__name__)     #this helps flask to find all the files in directory
 @app.route('/')
 
 def index():
-    first = 'daishenku'
+    first = 'daishinkan'
     return render_template('index.html', first_name = first)
 
 #users route: http://127.0.0.1:5000/user/Sawara
