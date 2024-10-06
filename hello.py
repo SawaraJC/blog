@@ -65,14 +65,24 @@ def name():
 
 @app.route('/user/add', methods=["GET","POST"])
 def add_user():
+    name = None
     form = UserForm()
     if form.validate_on_submit():
-        name = form.name.data 
-        email = form.email.data 
+        #filter users based on their email and return the firs one, rather their should not be any duplicated users
+        user = Users.query.filter_by(email = form.email.data).first()
+
+        #if there is no user
+        if user is None:
+            user = Users(name = form.name.data, email = form.email.data)
+            db.session.add(user)
+            db.session.commit()
+
+        name = form.name.data
         form.name.data = ''
         form.email.data = ''
-        flash("Form submitted and user added")
-    return render_template("add_user.html", form=form)
+        flash("User added !")
+    our_users = Users.query.order_by(Users.date_added)
+    return render_template("add_user.html", form=form, name = name, our_users = our_users)
 
 # Create the database before the first request
 
