@@ -27,9 +27,17 @@
         {{ form.name(
             class="form-control"
         ) }}
-        
-        
         <br>
+
+        {{ form.email.label(
+            class_="form-label"
+        ) }}
+
+        {{ form.email(
+            class="form-control"
+        ) }}
+        <br>
+
         {{ form.submit(
             class="btn btn-secondary"
         ) }}

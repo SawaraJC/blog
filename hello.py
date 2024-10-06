@@ -1,9 +1,10 @@
 from flask import Flask, render_template, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import email_validator
 
 #creating a flask instance
 app = Flask(__name__)     #this helps flask to find all the files in directory
@@ -26,6 +27,14 @@ class Users(db.Model):
 
     def __repr__(self):
         return '<Name %r>' %self.name
+    
+with app.app_context():
+    db.create_all()
+
+class UserForm(FlaskForm):
+    name = StringField('What is your name?', validators=[DataRequired()])
+    email = StringField('What is your email?', validators=[DataRequired(), Email()])
+    submit = SubmitField("Submit")
 
 class NamerForm(FlaskForm):
     name = StringField('What is your name?', validators=[DataRequired()])
@@ -54,7 +63,18 @@ def name():
         flash("Form Submitted!")
     return render_template('name.html', name=name, form=form)
 
-#create custom error page
+@app.route('/user/add', methods=["GET","POST"])
+def add_user():
+    form = UserForm()
+    if form.validate_on_submit():
+        name = form.name.data 
+        email = form.email.data 
+        form.name.data = ''
+        form.email.data = ''
+        flash("Form submitted and user added")
+    return render_template("add_user.html", form=form)
+
+# Create the database before the first request
 
 #invalid url
 @app.errorhandler(404)
