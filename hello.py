@@ -2,12 +2,30 @@ from flask import Flask, render_template, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 #creating a flask instance
 app = Flask(__name__)     #this helps flask to find all the files in directory
 
 #create a secret key for form
 app.config['SECRET_KEY'] = 'Sawara-WTF?'
+
+#add database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+
+#initialise db
+db = SQLAlchemy(app)
+
+#create model
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Name %r>' %self.name
 
 class NamerForm(FlaskForm):
     name = StringField('What is your name?', validators=[DataRequired()])
