@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
@@ -83,6 +83,32 @@ def add_user():
         flash("User added !")
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form, name = name, our_users = our_users)
+
+@app.route('/update/<int:id>', methods=["GET","POST"])
+def update(id):
+    form = UserForm()
+    set_name_to = Users.query.get_or_404(id)
+    if request.method == "POST":
+        set_name_to.name = request.form['name']
+        set_name_to.email = request.form['email']
+        try:
+            db.session.commit()
+            flash("User updated")
+            return render_template("update.html",
+                                   form = form,
+                                   set_name_to = set_name_to)
+        except:
+            flash("Some error")
+            return render_template("update.html",
+                                   form = form,
+                                   set_name_to = set_name_to)
+        
+    else:
+        # flash("User updated")
+        return render_template("update.html",
+                                   form = form,
+                                   set_name_to = set_name_to)
+
 
 # Create the database before the first request
 
